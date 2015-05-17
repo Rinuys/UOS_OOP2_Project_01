@@ -3,8 +3,8 @@ package Pack01;
 import java.io.*;
 
 public class ReadFileData {
-	private static StringBuffer buffer = new StringBuffer();
-	public ReadFileData(){
+	
+	public ReadFileData(StringBuffer buffer){
 		int b = 0;
 		FileInputStream file = null;
 		try{
@@ -14,7 +14,7 @@ public class ReadFileData {
 				buffer.append((char)b);
 				b=file.read();
 			}
-			System.out.println(buffer);
+			//System.out.println(buffer);
 		} catch(FileNotFoundException e){
 			System.out.println("Oops : FileNotFoundException");
 		} catch(IOException e){
