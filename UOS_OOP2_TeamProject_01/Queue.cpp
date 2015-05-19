@@ -38,7 +38,7 @@ bool Queue::IsFull()
 }
 void Queue::EnQueue(int data)
 {
-	if(!Queue::IsFull()){
+	if(!Queue::IsFull()) {
 		arr[last] = data;
 		last = (last+1)%size;
 	}

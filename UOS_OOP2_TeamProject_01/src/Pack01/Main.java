@@ -6,8 +6,16 @@ public class Main {
 	private static StringBuffer buffer = new StringBuffer();
 	
 	public static void main(String[] args) {
+		Class myClass = new Class(null);
 		new ReadFileData(buffer);                 // ÆÄÀÏÀ» ÀÐ¾î¼­ buffer·Î ¿Å±è
-		new Parsing(buffer);                       // ÆÄ½Ì
+		new Parsing(buffer, myClass);            // ÆÄ½Ì
+		//System.out.println(myClass.getName());
+		for(int i = 0 ; i<myClass.getMethodListSize();i++){
+			System.out.println(myClass.getMethod(i).toString());
+		}
+		for(int i = 0 ; i<myClass.getMemberListSize();i++){
+			System.out.println(myClass.getMember(i).toString());
+		}
 	}
 
 }
