@@ -59,8 +59,7 @@ class Class extends Information{
 
 class Method extends Information{
 	Vector<Member> memberList = new Vector<Member>();
-	Vector<Member> useMemberList = new Vector<Member>();
-	Vector<String> parameter = new Vector<String>();
+	Vector<Member> usedMemberList = new Vector<Member>();
 	public Method(String name, String type, String access){
 		super.setName(name);
 		super.setAccess(access);
@@ -68,6 +67,21 @@ class Method extends Information{
 	}
 	public void addMember(Member member){
 		memberList.addElement(member);
+	}
+	public void addUsedMember(Member member){
+		usedMemberList.addElement(member);
+	}
+	public Member getMember(int index){
+		return memberList.elementAt(index);
+	}
+	public Member getUsedMember(int index){
+		return usedMemberList.elementAt(index);
+	}
+	public int getUsedMemberListSize(){
+		return usedMemberList.size();
+	}
+	public int getMemberListSize(){
+		return memberList.size();
 	}
 	public String toString(){
 		return super.getName() + " " + super.getType() + " " + super.getAccess();
@@ -89,6 +103,7 @@ public class KeyWord {
 	public static String process = null;
 	public static String access = "public";
 	public static int stack = 0;
+	public static int methodIndex = 0;
 	public KeyWord(String str, Class myClass){
 		StringTokenizer st;
 		if(process == null){
@@ -96,7 +111,6 @@ public class KeyWord {
 			while(st.hasMoreTokens()){
 				if(st.nextToken().equals("class")){
 					myClass.setName(st.nextToken());
-					//System.out.println(myClass.getName());
 					break;
 				}
 			}
@@ -129,12 +143,12 @@ public class KeyWord {
 				if(temp.equals("bool") || temp.equals("int") || temp.equals("void")){
 					String type = temp;
 					temp = st.nextToken();
-					if(isMethod(temp)){
+					if(IsMethod(temp)){
 						Method method = new Method(temp,type,access);
 						myClass.addMethod(method);
 					}
 					else{
-						if(isArray(temp)){
+						if(IsArray(temp)){
 							type=type+"[]";
 							st = new StringTokenizer(temp,"[ ]");
 							temp = st.nextToken();
@@ -152,7 +166,7 @@ public class KeyWord {
 					access = "public";
 					break;
 				}
-				if(isMethod(temp)){
+				if(IsMethod(temp)){
 					Method method = new Method(temp,"void",access);
 					myClass.addMethod(method);
 					break;
@@ -165,9 +179,116 @@ public class KeyWord {
 				
 			}
 		}
+		else if(process.equals("method")){
+			st = new StringTokenizer(str,":: \r");
+			while(st.hasMoreTokens() && process.equals("method")){
+				String temp = st.nextToken();
+				//System.out.print("/"+temp+"/");
+				if(temp.equals("bool") || temp.equals("int") || temp.equals("void")){
+					temp = st.nextToken();
+					temp = st.nextToken();
+					if(HasParam(temp)){
+						for(int i = 0 ; i < myClass.getMethodListSize();i++){
+							StringTokenizer st2 = new StringTokenizer(temp,"() \n\r\t");
+							String temp2;
+							String processingMethod = null;
+							while(st2.hasMoreTokens()){
+								temp2 = st2.nextToken();
+								if(processingMethod == null){
+									int j;
+									for(j = 0 ; j<temp2.length(); j++){
+										if(temp2.charAt(j) != myClass.getMethod(i).getName().charAt(j)){
+											break;
+										}
+									}
+									if(j == temp2.length()){
+										processingMethod = "select";
+									}
+									else break;
+								}
+								else if(processingMethod.equals("select") && st2.hasMoreTokens()){
+									String type = temp2;
+									temp2 = st2.nextToken();
+									Member tempMember = new Member(temp2,type,"public");
+									myClass.getMethod(i).addMember(tempMember);
+								}
+							}
+							if(!st2.hasMoreTokens()){
+								methodIndex = i;
+								process = "InMethod";
+								processingMethod = null;
+								break;
+							}
+						}
+					}
+					else{
+						for(int i = 0 ; i < myClass.getMethodListSize();i++){
+							if(myClass.getMethod(i).getName().equals(temp)){
+								methodIndex = i;
+								process = "InMethod";
+								break;
+							}
+						}
+					}
+				}
+				if(temp.equals(myClass.getName())){
+					temp = st.nextToken();
+					//System.out.println(myClass.getMethodListSize());
+					for(int i = 0 ; i < myClass.getMethodListSize();i++){
+						if(myClass.getMethod(i).getName().equals(temp)){
+							methodIndex = i;
+							process = "InMethod";
+							break;
+						}
+					}
+				}
+				
+			}
+		}
+		else if(process.equals("InMethod")){
+			
+			st = new StringTokenizer(str," \n\t\r[]()%+=!:;");
+			
+			while(st.hasMoreTokens()){
+				String temp = st.nextToken();
+				
+				
+				//System.out.println(myClass.getMethod(methodIndex).getName()+" "+temp);
+				
+				if(temp.equals("{")){
+					stack++;
+					break;
+				}
+				if(temp.equals("}")){
+					stack--;
+					break;
+				}
+				
+				for(int i = 0; i < myClass.getMemberListSize();i++){
+					if(myClass.getMember(i).getName().equals(temp)){
+						int j;
+						for(j = 0 ; j < myClass.getMethod(methodIndex).getUsedMemberListSize();j++){
+							if(myClass.getMethod(methodIndex).getUsedMember(j).getName().equals(temp)){
+								break;
+							}
+						}
+						
+						if(j==myClass.getMethod(methodIndex).getUsedMemberListSize()){
+							myClass.getMethod(methodIndex).addUsedMember(myClass.getMember(i));
+							break;
+						}
+						break;
+					}
+				}
+				
+			}
+			if(stack == 0){
+				process = "method";
+			}
+		}
 		
 	}
-	public boolean isMethod(String temp){
+	public boolean IsMethod(String temp){
 		for(int i = 0 ; i<temp.length();i++){
 			if(temp.charAt(i)=='('){
 				return true;
@@ -175,10 +296,20 @@ public class KeyWord {
 		}
 		return false;
 	}
-	public boolean isArray(String temp){
+	public boolean IsArray(String temp){
 		for(int i = 0 ; i<temp.length();i++){
 			if(temp.charAt(i)=='['){
 				return true;
+			}
+		}
+		return false;
+	}
+	public boolean HasParam(String temp){
+		for(int i = 0 ; i<temp.length();i++){
+			if(temp.charAt(i)=='('){
+				if(temp.charAt(i+1) != ')'){
+					return true;
+				}
 			}
 		}
 		return false;

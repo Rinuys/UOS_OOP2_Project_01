@@ -12,10 +12,10 @@ public class Main {
 		//System.out.println(myClass.getName());
 		for(int i = 0 ; i<myClass.getMethodListSize();i++){
 			System.out.println(myClass.getMethod(i).toString());
+			for(int j = 0 ; j<myClass.getMethod(i).getUsedMemberListSize();j++)
+				System.out.println(myClass.getMethod(i).getUsedMember(j).toString());
 		}
-		for(int i = 0 ; i<myClass.getMemberListSize();i++){
-			System.out.println(myClass.getMember(i).toString());
-		}
+		
 	}
 
 }
