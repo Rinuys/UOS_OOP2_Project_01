@@ -181,15 +181,19 @@ public class KeyWord {
 		}
 		else if(process.equals("method")){
 			st = new StringTokenizer(str,":: \r");
+			int param = 0;
+			String paramType = null;
 			while(st.hasMoreTokens() && process.equals("method")){
 				String temp = st.nextToken();
+				
 				//System.out.print("/"+temp+"/");
 				if(temp.equals("bool") || temp.equals("int") || temp.equals("void")){
 					temp = st.nextToken();
 					temp = st.nextToken();
+					
 					if(HasParam(temp)){
-						for(int i = 0 ; i < myClass.getMethodListSize();i++){
-							StringTokenizer st2 = new StringTokenizer(temp,"() \n\r\t");
+						for(int i = 0 ; i < myClass.getMethodListSize() && param != 1;i++){
+							StringTokenizer st2 = new StringTokenizer(temp,"( )");
 							String temp2;
 							String processingMethod = null;
 							while(st2.hasMoreTokens()){
@@ -202,24 +206,22 @@ public class KeyWord {
 										}
 									}
 									if(j == temp2.length()){
+										methodIndex = i;
 										processingMethod = "select";
 									}
 									else break;
 								}
-								else if(processingMethod.equals("select") && st2.hasMoreTokens()){
-									String type = temp2;
-									temp2 = st2.nextToken();
-									Member tempMember = new Member(temp2,type,"public");
-									myClass.getMethod(i).addMember(tempMember);
+								if(temp2.equals("int") || temp2.equals("bool") || temp2.equals("void")){
+									paramType = temp2;
+									param = 1;
 								}
 							}
-							if(!st2.hasMoreTokens()){
-								methodIndex = i;
-								process = "InMethod";
-								processingMethod = null;
-								break;
-							}
+							processingMethod = "null";
+							continue;
+							
+							
 						}
+						
 					}
 					else{
 						for(int i = 0 ; i < myClass.getMethodListSize();i++){
@@ -230,6 +232,29 @@ public class KeyWord {
 							}
 						}
 					}
+				}
+				if(param == 1){
+					while(st.hasMoreTokens()){
+						temp = st.nextToken();
+						
+						StringTokenizer st2 = new StringTokenizer(temp,")");
+						
+						String temp2 = st2.nextToken();
+						if(st2.hasMoreTokens()) continue;
+						
+						if(temp2.equals("int") || temp2.equals("bool") || temp2.equals("void")){
+							paramType = temp2;
+						}
+						else{
+							
+							Member tempMember = new Member(temp2, paramType, "public");
+							myClass.getMethod(methodIndex).addMember(tempMember);
+						}
+					}
+					process = "InMethod";
+					param = 0;
+					break;
+					
 				}
 				if(temp.equals(myClass.getName())){
 					temp = st.nextToken();
@@ -242,8 +267,13 @@ public class KeyWord {
 						}
 					}
 				}
-				
+				if(param == 1 && st.hasMoreTokens()){
+					process = "InMethod";
+					param = 0;
+					break;
+				}
 			}
+			
 		}
 		else if(process.equals("InMethod")){
 			
