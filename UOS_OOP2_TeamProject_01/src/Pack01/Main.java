@@ -15,7 +15,7 @@ public class Main {
 				System.out.println(myClass.getMethod(i).getMember(j).toString());
 			for(int j = 0 ; j<myClass.getMethod(i).getUsedMemberListSize();j++)
 				System.out.println(myClass.getMethod(i).getUsedMember(j).toString());
-		}
+		} 
 		
 	}
 
