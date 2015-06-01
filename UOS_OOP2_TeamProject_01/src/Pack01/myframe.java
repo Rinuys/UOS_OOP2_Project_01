@@ -190,18 +190,19 @@ class myframe extends JFrame implements ActionListener{
 		fc = new JFileChooser();
 		
 		if (e.getSource().equals((JMenuItem)exit)) {
+			System.exit(0);
 		}
 		else if (e.getSource().equals((JMenuItem)open)) {
 			File data;
 			fc.showOpenDialog(open);
 			data = fc.getSelectedFile();
 			
-			//new ReadFileData(Main.buffer, data);
-			}
+			new ReadFileData(Main.buffer, data);
+		}
 		else if (e.getSource().equals((JMenuItem)save)) {
 			fc.showSaveDialog(save);
 			
-			}
+		}
 		// “파일 저장”버튼에 대한 액션 이벤트 처리
 
 	}
