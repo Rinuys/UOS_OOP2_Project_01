@@ -1,4 +1,4 @@
-class Queue 
+class Queue
 {
 public:
 	Queue(void);
@@ -13,7 +13,7 @@ private:
 	int last;
 	int first;
 };
-Queue::Queue(void) 
+Queue::Queue(void)
 {
 	size = 10;
 	last = 0;
