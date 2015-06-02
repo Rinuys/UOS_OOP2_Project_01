@@ -136,7 +136,13 @@ class myframe extends JFrame implements ActionListener{
 		}
 		else if (e.getSource().equals((JMenuItem)save)) {
 			fc.showSaveDialog(save);
-			new WriteFileData(fc.getSelectedFile(),buffer.toString());               // 여기 buffer자리에 수정된 string을 넣어야함
+			String OutputString;
+			OutputString = myClass.getClassOut()+myClass.getClassIn();
+			for(int i = 0 ; i < myClass.getMethodListSize() ; i++){
+				OutputString += (myClass.getMethod(i).getOut() + myClass.getMethod(i).getIn());
+				OutputString += "\n";
+			}
+			new WriteFileData(fc.getSelectedFile(),OutputString);               // 여기 buffer자리에 수정된 string을 넣어야함
 			
 		}
 		// “파일 저장”버튼에 대한 액션 이벤트 처리

@@ -201,18 +201,27 @@ public class Parsing {
 			}
 			
 			OutParsing op;
+			String tempstr;
 			if(rightIndex==0){
-				op = new OutParsing(str.substring(rightIndex, leftIndex), myClass, kw);
+				tempstr =str.substring(rightIndex, leftIndex); 
 			}
 			else{
 				if(str.charAt(rightIndex+1)==';'){
-					op = new OutParsing(str.substring(rightIndex+4, leftIndex), myClass, kw);
+					tempstr = str.substring(rightIndex+4, leftIndex);
 				}
 				else{
-					op = new OutParsing(str.substring(rightIndex+3, leftIndex), myClass, kw);
+					tempstr = str.substring(rightIndex+3, leftIndex);
 				}
 				
 			}
+			op = new OutParsing(tempstr, myClass, kw);
+			if(Process.equals("class")){
+				myClass.setClassOut(tempstr);
+			}
+			else{
+				myClass.getMethod(methodIndex).setMethodOut(tempstr);
+			}
+			
 			for(rightIndex = leftIndex+1; ; rightIndex++){
 				if(str.charAt(rightIndex) == '{'){
 					stack++;
@@ -224,8 +233,15 @@ public class Parsing {
 					}
 				}
 			}
+			tempstr = str.substring(leftIndex, rightIndex+1);
+			new InParsing(tempstr,myClass,kw);
 			
-			new InParsing(str.substring(leftIndex, rightIndex+1),myClass,kw);
+			if(Process.equals("class")){
+				myClass.setClassIn(tempstr);
+			}
+			else{
+				myClass.getMethod(methodIndex).setMethodIn(tempstr);
+			}
 			
 			leftIndex = rightIndex -1 ;
 		}

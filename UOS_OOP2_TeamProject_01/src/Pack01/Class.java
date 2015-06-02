@@ -6,6 +6,8 @@ class Information{
 	private String name;
 	private String type;
 	private String access;
+	private String In;
+	private String Out;
 	
 	public void setName(String name){
 		this.name = name;
@@ -24,6 +26,18 @@ class Information{
 	}
 	public String getAccess(){
 		return access;
+	}
+	public String getIn(){
+		return In;
+	}
+	public void setIn(String str){
+		this.In = str;
+	}
+	public String getOut(){
+		return Out;
+	}
+	public void setOut(String str){
+		this.Out = str;
 	}
 }
 
@@ -54,6 +68,18 @@ public class Class extends Information{
 	public int getMemberListSize(){
 		return memberList.size();
 	}
+	public String getClassOut(){
+		return super.getOut();
+	}
+	public void setClassOut(String str){
+		super.setOut(str);
+	}
+	public String getClassIn(){
+		return super.getIn();
+	}
+	public void setClassIn(String str){
+		super.setIn(str);
+	}
 }
 
 class Method extends Information{
@@ -81,6 +107,18 @@ class Method extends Information{
 	}
 	public int getMemberListSize(){
 		return memberList.size();
+	}
+	public String getMethodOut(){
+		return super.getOut();
+	}
+	public void setMethodOut(String str){
+		super.setOut(str);
+	}
+	public String getMethodIn(){
+		return super.getIn();
+	}
+	public void setMethodIn(String str){
+		super.setIn(str);
 	}
 	public String toString(){
 		return super.getName() + " " + super.getType() + " " + super.getAccess();
