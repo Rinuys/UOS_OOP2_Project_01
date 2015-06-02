@@ -98,7 +98,6 @@ class myframe extends JFrame implements ActionListener{
 
 		setJMenuBar(menuBar); // 메뉴바 삽입
 
-		pack();
 		setVisible(true);
 		/*--------------------------------------- 마무리 끝 --------------------------*/
 	}
@@ -137,6 +136,7 @@ class myframe extends JFrame implements ActionListener{
 		}
 		else if (e.getSource().equals((JMenuItem)save)) {
 			fc.showSaveDialog(save);
+			new WriteFileData(fc.getSelectedFile(),buffer.toString());               // 여기 buffer자리에 수정된 string을 넣어야함
 			
 		}
 		// “파일 저장”버튼에 대한 액션 이벤트 처리
@@ -198,13 +198,7 @@ class myframe extends JFrame implements ActionListener{
 		myframe f = new myframe(myClass);
 		
 		
-		/*for(int i = 0 ; i<myClass.getMethodListSize();i++){
-			System.out.println(myClass.getMethod(i).toString());
-			for(int j = 0 ; j<myClass.getMethod(i).getMemberListSize();j++)
-				System.out.println(myClass.getMethod(i).getMember(j).toString());
-			for(int j = 0 ; j<myClass.getMethod(i).getUsedMemberListSize();j++)
-				System.out.println(myClass.getMethod(i).getUsedMember(j).toString());
-		} */
+		
 		
 	}
 	
