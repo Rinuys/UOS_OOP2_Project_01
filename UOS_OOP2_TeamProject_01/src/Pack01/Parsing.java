@@ -237,6 +237,7 @@ public class Parsing {
 			new InParsing(tempstr,myClass,kw);
 			
 			if(Process.equals("class")){
+				tempstr+=";\n";
 				myClass.setClassIn(tempstr);
 			}
 			else{
