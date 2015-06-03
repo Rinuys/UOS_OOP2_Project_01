@@ -1,12 +1,10 @@
 package Pack01;
 
-import java.util.Vector;
-
 public class KeyWord {
 	private String[][] KeyWordList;
 	public KeyWord(){
-		KeyWordList = new String[6][2];
-		
+		KeyWordList = new String[6][2];                 // 0열의 행들은 각각 키워드들을 저장.
+															   // 1열의 행들은 각 키워드의 형식을 저장.
 		KeyWordList[0][0] = "class"; KeyWordList[0][1] = "class" ;
 		
 		KeyWordList[1][0] = "int" ; KeyWordList[1][1] = "type" ;
@@ -18,8 +16,8 @@ public class KeyWord {
 	}
 	
 	public int IsKeyWord(String str){
-		int index;
-		for(index = 0 ; index < 6 ; index++){
+		int index;											   // str을 받아서 keyword인지를 확인 후 맞으면 키워드 인덱스(행)를 반환
+		for(index = 0 ; index < 6 ; index++){           // 없으면 -1을 반환
 			if(str.equals(KeyWordList[index][0])){
 				return index;
 			}
@@ -27,8 +25,7 @@ public class KeyWord {
 		return -1;
 	}
 	
-	public String WhatKeyWord(int index){
+	public String WhatKeyWord(int index){            // 인덱스를 받아서 키워드의 타입을 반환
 		return KeyWordList[index][1];
 	}
-	
 }

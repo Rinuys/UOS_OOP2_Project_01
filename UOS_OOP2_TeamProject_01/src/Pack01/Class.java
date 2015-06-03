@@ -1,13 +1,13 @@
 package Pack01;
 
-import java.util.Vector;
+import java.util.Vector;           // 동적인 배열을 사용하기 위해 Vector를 사용했다.
 
-class Information{
+class Information{                // Class, Method, Member class들의 공통적인 부분을 묶어서 Information class를 만들었다.
 	private String name;
 	private String type;
 	private String access;
-	private String In;
-	private String Out;
+	private String In;             // 코드에서 '{' 부터 '}' 까지의 문자열
+	private String Out;           // 코드에서 '{' 의 앞부분의 문자열
 	
 	public void setName(String name){
 		this.name = name;
@@ -27,64 +27,52 @@ class Information{
 	public String getAccess(){
 		return access;
 	}
-	public String getIn(){
+	public String getIn(){                        // 코드에서 '{' 부터 '}' 까지의 부분을 반환
 		return In;
 	}
-	public void setIn(String str){
+	public void setIn(String str){               // 코드에서 '{' 부터 '}' 까지의 부분을 수정
 		this.In = str;
 	}
-	public String getOut(){
+	public String getOut(){                      // 코드에서 '{' 전의 내용을 반환
 		return Out;
 	}
-	public void setOut(String str){
+	public void setOut(String str){             // 코드에서 '{' 전의 내용을 수정
 		this.Out = str;
 	}
 }
 
-public class Class extends Information{
-	private Vector<Method> methodList = new Vector<Method>();
-	private Vector<Member> memberList = new Vector<Member>();
+public class Class extends Information{                                         // Class 를 저장하기 위한 class
+	private Vector<Method> methodList = new Vector<Method>();        // Class의 method들을 Vector로 관리한다.
+	private Vector<Member> memberList = new Vector<Member>();      // Class의 field들을 Vector로 관리한다.
 	
 	public Class(String name){
-		super.setName(name);
+		super.setName(name);                                                      // 이름을 인자로 받아서 Class의 이름을 설정
 		super.setAccess("public");
 		super.setType(null);
 	}
-	public void addMethod(Method method){
+	public void addMethod(Method method){                                  // Vector에 메소드를 추가
 		methodList.addElement(method);
 	}
-	public void addMember(Member member){
+	public void addMember(Member member){                                // Vector에 필드를 추가
 		memberList.addElement(member);
 	}
-	public Method getMethod(int index){
+	public Method getMethod(int index){                                       // i번째 method를 반환
 		return methodList.elementAt(index);
 	}
-	public Member getMember(int index){
+	public Member getMember(int index){                                      // i번째 field를 반환
 		return memberList.elementAt(index);
 	}
-	public int getMethodListSize(){
+	public int getMethodListSize(){                                                // Method들의 수를 반환
 		return methodList.size();
 	}
-	public int getMemberListSize(){
+	public int getMemberListSize(){                                               // field들의 수를 반환
 		return memberList.size();
-	}
-	public String getClassOut(){
-		return super.getOut();
-	}
-	public void setClassOut(String str){
-		super.setOut(str);
-	}
-	public String getClassIn(){
-		return super.getIn();
-	}
-	public void setClassIn(String str){
-		super.setIn(str);
 	}
 }
 
-class Method extends Information{
-	Vector<Member> memberList = new Vector<Member>();
-	Vector<Member> usedMemberList = new Vector<Member>();
+class Method extends Information{                                             // Method class
+	Vector<Member> memberList = new Vector<Member>();               // Method 의 member들을 관리
+	Vector<Member> usedMemberList = new Vector<Member>();         // Method 가 사용하고 있는 Class의 멤버들을 관리
 	public Method(String name, String type, String access){
 		super.setName(name);
 		super.setAccess(access);
@@ -108,24 +96,12 @@ class Method extends Information{
 	public int getMemberListSize(){
 		return memberList.size();
 	}
-	public String getMethodOut(){
-		return super.getOut();
-	}
-	public void setMethodOut(String str){
-		super.setOut(str);
-	}
-	public String getMethodIn(){
-		return super.getIn();
-	}
-	public void setMethodIn(String str){
-		super.setIn(str);
-	}
 	public String toString(){
 		return super.getName() + " " + super.getType() + " " + super.getAccess();
 	}
 }
 
-class Member extends Information{
+class Member extends Information{                                             // Member class
 	public Member(String name, String type, String access){
 		super.setName(name);
 		super.setAccess(access);

@@ -216,10 +216,10 @@ public class Parsing {
 			}
 			op = new OutParsing(tempstr, myClass, kw);
 			if(Process.equals("class")){
-				myClass.setClassOut(tempstr);
+				myClass.setOut(tempstr);
 			}
 			else{
-				myClass.getMethod(methodIndex).setMethodOut(tempstr);
+				myClass.getMethod(methodIndex).setOut(tempstr);
 			}
 			
 			for(rightIndex = leftIndex+1; ; rightIndex++){
@@ -238,10 +238,10 @@ public class Parsing {
 			
 			if(Process.equals("class")){
 				tempstr+=";\n";
-				myClass.setClassIn(tempstr);
+				myClass.setIn(tempstr);
 			}
 			else{
-				myClass.getMethod(methodIndex).setMethodIn(tempstr);
+				myClass.getMethod(methodIndex).setIn(tempstr);
 			}
 			
 			leftIndex = rightIndex -1 ;

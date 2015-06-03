@@ -8,7 +8,7 @@ import javax.swing.*;
 import javax.swing.tree.*;
 import javax.swing.event.*;
 
-class myframe extends JFrame implements ActionListener, MouseListener {
+class myframe extends JFrame{
 	public static StringBuffer buffer = new StringBuffer();
 	public static Class myClass = new Class(null);
 	public static int methodIndex = 0;
@@ -85,17 +85,6 @@ class myframe extends JFrame implements ActionListener, MouseListener {
 					selectDataTable();
 					LeftPanel();
 					RightPanel();
-					for (int i = 0; i < myClass.getMethodListSize(); i++) {
-						System.out.println(myClass.getMethod(i).toString());
-						for (int j = 0; j < myClass.getMethod(i)
-								.getMemberListSize(); j++)
-							System.out.println(myClass.getMethod(i)
-									.getMember(j).toString());
-						for (int j = 0; j < myClass.getMethod(i)
-								.getUsedMemberListSize(); j++)
-							System.out.println(myClass.getMethod(i)
-									.getUsedMember(j).toString());
-					}
 					setSize(1000, 400);
 					revalidate();
 					setVisible(true);
@@ -114,7 +103,7 @@ class myframe extends JFrame implements ActionListener, MouseListener {
 					myClass.getMethod(methodIndex).setIn("{\r\n"+method_data.getText()+"\n}");
 					fc.showSaveDialog(save);
 					String OutputString;
-					OutputString = myClass.getClassOut()+myClass.getClassIn();
+					OutputString = myClass.getOut()+myClass.getIn();
 					for(int i = 0 ; i < myClass.getMethodListSize() ; i++){
 						OutputString += (myClass.getMethod(i).getOut() + myClass.getMethod(i).getIn());
 						OutputString += "\n";
@@ -154,29 +143,6 @@ class myframe extends JFrame implements ActionListener, MouseListener {
 
 		setVisible(true);
 		/*--------------------------------------- 마무리 끝 --------------------------*/
-	}
-
-	/*----------------------------- 파일 선택기 시작 ------------------------------------*/
-
-	public void actionPerformed(ActionEvent e) {
-	}
-
-	/*------------------------------------ 파일 선택기 끝 -----------------------------------*/
-
-	public void mouseClicked(MouseEvent e) {
-
-	}
-
-	public void mousePressed(MouseEvent e) {
-	}
-
-	public void mouseReleased(MouseEvent e) {
-	}
-
-	public void mouseEntered(MouseEvent e) {
-	}
-
-	public void mouseExited(MouseEvent e) {
 	}
 
 	public static void main(String[] args) {
@@ -222,7 +188,7 @@ class myframe extends JFrame implements ActionListener, MouseListener {
 						selectClassTable();
 						rightpanel.add(class_scrollPane);
 						RePaint();
-						//class_scrollPane.setVisible(true);
+
 					}
 					for (int i = 0; i < myClass.getMethodListSize(); i++)
 						if (temp == methodchild[i]) {
@@ -231,7 +197,12 @@ class myframe extends JFrame implements ActionListener, MouseListener {
 							for(int j=0;j<myClass.getMethod(i).getUsedMemberListSize();j++){
 								usedtempString += myClass.getMethod(i).getUsedMember(j).getName() + ", ";
 							}
-							usedtempString = usedtempString.substring(0,usedtempString.lastIndexOf(", "));
+							if(usedtempString.length() !=0 ){
+								usedtempString = usedtempString.substring(0,usedtempString.lastIndexOf(", "));
+							}
+							else{
+								usedtempString = null;
+							}
 							usedmember = new JTextField("use : " + usedtempString);
 							
 							
@@ -243,7 +214,7 @@ class myframe extends JFrame implements ActionListener, MouseListener {
 							method_scrollPane.setSize(400, 400);
 							method_data.setEditable(true);
 							tempString = myClass.getMethod(i).getIn();
-							//method_data.setSize(600, 450);
+
 							if(tempString.length() <= 4) tempString = " ";
 							else tempString = tempString.substring(3,tempString.lastIndexOf("}")-1);
 							
@@ -253,7 +224,7 @@ class myframe extends JFrame implements ActionListener, MouseListener {
 							rightpanel.removeAll();
 							rightpanel.add(method_scrollPane);
 							RePaint();
-							//method_scrollPane.setVisible(true);
+
 						}
 					for (int i = 0; i < myClass.getMemberListSize(); i++)
 						if (temp == fieldchild[i]) {
@@ -263,7 +234,7 @@ class myframe extends JFrame implements ActionListener, MouseListener {
 							selectDataTable();
 							rightpanel.add(data_scrollPane);
 							RePaint();
-							//data_scrollPane.setVisible(true);
+
 						}
 				}
 				rightpanel.setVisible(true);
@@ -366,7 +337,6 @@ class myframe extends JFrame implements ActionListener, MouseListener {
 	public void addTotalPanel(JScrollPane temp) {
 		rightpanel.add(temp);
 		totalpanel.add(rightpanel);
-		totalpanel.addMouseListener(this);
 		add(totalpanel);
 	}
 }
